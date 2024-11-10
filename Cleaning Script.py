@@ -37,7 +37,6 @@ gene_cols = [
     'chrom_end_pos', 'chrom_strand'
 ]
 gene_df.columns = gene_cols
-
 chrom_dict = {
     'chrI': 1, 'chrII': 2, 'chrIII': 3, 'chrV': 5, 'chrVIII': 8,
     'chrIX': 9, 'chrXI': 11, 'chrVI': 6, 'chrIV': 4, 'chrVII': 7,
@@ -57,3 +56,9 @@ bud_cols = ['time', 'zero_buds', 'one_bud', 'total_counted', 'percentage_budding
 bud_df.columns = bud_cols
 bud_dtypes = ['Int64', 'Int64', 'Int64', 'Int64', 'double']
 bud_df = dtype_strip(bud_df, bud_cols, bud_dtypes)
+
+
+# Export Cleaned Dataframes
+#gene_df.to_csv('genes_clean', index=False)
+#fpkm_df.to_csv('fpkm1_clean', index=False)
+#bud_df.to_csv('buds_clean', index=False)
