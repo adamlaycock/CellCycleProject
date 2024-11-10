@@ -1,4 +1,4 @@
-time,zero_buds,one_bud,total_counted,percentage_budding
+time_point,zero_buds,one_bud,total_counted,percentage_budding
 0,229,5,234,2.137
 5,211,5,216,2.315
 10,221,7,228,3.07

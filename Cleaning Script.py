@@ -52,7 +52,7 @@ gene_df = dtype_strip(gene_df, gene_cols, gene_dtypes)
 
 # bud_df Cleaning
 bud_df = bud_df.iloc[0:51, 0:5]
-bud_cols = ['time', 'zero_buds', 'one_bud', 'total_counted', 'percentage_budding']
+bud_cols = ['time_point', 'zero_buds', 'one_bud', 'total_counted', 'percentage_budding']
 bud_df.columns = bud_cols
 bud_dtypes = ['Int64', 'Int64', 'Int64', 'Int64', 'double']
 bud_df = dtype_strip(bud_df, bud_cols, bud_dtypes)
