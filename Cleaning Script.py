@@ -44,7 +44,7 @@ chrom_dict = {
     'chrXVI': 16, 'chrmt': 'mt', '<NA>': None
 }
 gene_df['chrom_identifier'] = gene_df['chrom_identifier'].replace(chrom_dict)
-
+gene_df = gene_df[gene_df['qualifier'] != 'Dubious']
 gene_dtypes = ['string', 'string', 'string', 'string', 'string', 'string',
                'string', 'Int64', 'Int64', 'Int64']
 gene_df = dtype_strip(gene_df, gene_cols, gene_dtypes)
