@@ -18,107 +18,99 @@ gene_df['name'] = gene_df['name'].astype('str')
 
 # Hypothesis: 'The expression of mitochondrial replication genes shows less periodicity compared to the expression nuclear DNA replication genes'
 
-# Nuclear DNA Replicated Related Genes
-topoiso_lst = [
-    'TOP1', 
-    'TOP2', 
-    'TOP3'
-]
-topiso = gene_df[gene_df['symbol'].isin(topoiso_lst)].copy()
-topiso.loc[:, 'complex'] = 'Topoisomerase'
+# Define function to get gene data and assign complex names
+def get_gene_complex(gene_df, gene_lst, complex_name):
+    df = gene_df[gene_df['symbol'].isin(gene_lst)].copy()
+    df.loc[:, 'complex'] = complex_name
+    return df
 
-dna_heli_lst = [
-    'HCS1'
-]
-helicase = gene_df[gene_df['symbol'].isin(dna_heli_lst)].copy()
-helicase.loc[:, 'complex'] = 'DNA Helicase'
+# Call function for nuclear DNA replication related genes
+topoiso_lst = ['TOP1', 'TOP2', 'TOP3']
+topiso = get_gene_complex(gene_df, topoiso_lst, 'Topoisomerase')
 
-ligase_lst = [
-    'CDC9'
-]
-ligase = gene_df[gene_df['symbol'].isin(ligase_lst)].copy()
-ligase.loc[:, 'complex'] = 'DNA Ligase'
+dna_heli_lst = ['HCS1']
+helicase = get_gene_complex(gene_df, dna_heli_lst, 'DNA Helicase')
 
-pol_ep_lst = [
-    'DPB2', 
-    'DPB3', 
-    'DPB4'
-]
-pol_ep = gene_df[gene_df['symbol'].isin(pol_ep_lst)].copy()
-pol_ep.loc[:, 'complex'] = 'Pol Epsilon'
+ligase_lst = ['CDC9']
+ligase = get_gene_complex(gene_df, ligase_lst, 'DNA Ligase')
 
-pol_al_lst = [
-    'POL1', 
-    'POL12', 
-    'PRI2', 
-    'PRI1'
-]
-pol_al = gene_df[gene_df['symbol'].isin(pol_al_lst)].copy()
-pol_al.loc[:, 'complex'] = 'Pol Alpha'
+pol_ep_lst = ['DPB2', 'DPB3', 'DPB4']
+pol_ep = get_gene_complex(gene_df, pol_ep_lst, 'Pol Epsilon')
 
-pol_de_lst = [
-    'POL3', 
-    'POL31', 
-    'POL32'
-]
-pol_de = gene_df[gene_df['symbol'].isin(pol_de_lst)].copy()
-pol_de.loc[:, 'complex'] = 'Pol Delta'
+pol_al_lst = ['POL1', 'POL12', 'PRI2', 'PRI1']
+pol_al = get_gene_complex(gene_df, pol_al_lst, 'Pol Alpha')
 
-telo_lst = [
-    'EST1', 
-    'EST2', 
-    'EST3'
-]
-telo = gene_df[gene_df['symbol'].isin(telo_lst)].copy()
-telo.loc[:, 'complex'] = 'Telomerase'
+pol_de_lst = ['POL3', 'POL31', 'POL32']
+pol_de = get_gene_complex(gene_df, pol_de_lst, 'Pol Delta')
 
+telo_lst = ['EST1', 'EST2', 'EST3']
+telo = get_gene_complex(gene_df, telo_lst, 'Telomerase')
+
+
+# Concatenate nuclear DNA replication related gene DataFrames
 nuclear_df = pd.concat([topiso, helicase, ligase, pol_ep, pol_al, pol_de, telo])
 
-# Mitochondrial Replication Related Genes
-mt_ribo_lst = [
-    'VAR1'
-]
-mt_ribo = gene_df[gene_df['symbol'].isin(mt_ribo_lst)].copy()
-mt_ribo.loc[:, 'complex'] = 'Mitoribosomes'
 
-pol_ga_lst = [
-    'MIP1'
-]
-pol_ga = gene_df[gene_df['symbol'].isin(pol_ga_lst)].copy()
-pol_ga.loc[:, 'complex'] = 'Pol Gamma'
+
+# Call function for mitochondrial replication related genes
+mt_ribo_lst = ['VAR1']
+mt_ribo = get_gene_complex(gene_df, mt_ribo_lst, 'Mitoribosomes')
+
+pol_ga_lst = ['MIP1']
+pol_ga = get_gene_complex(gene_df, pol_ga_lst, 'Pol Gamma')
 
 atp_syn_lst = [
     "ATP1", "ATP3", "ATP7", "ATP16", "ATP5", "ATP17", "ATP12", 
     "ATP2", "ATP14", "ATP10", "ATP11", "ATP4", "ATP15", "ATP20", 
     "ATP18", "ATP8", "ATP6", "ATP19"
 ]
-atp_syn = gene_df[gene_df['symbol'].isin(atp_syn_lst)].copy()
-atp_syn.loc[:, 'complex'] = 'ATP Synthase'
+atp_syn = get_gene_complex(gene_df, atp_syn_lst, 'ATP Synthase')
 
 cco_lst = [
     "COX15", "COX6", "COX5B", "COX9", "COX20", "COX4", "COX13",
     "COX18", "COX16", "COX17", "COX12", "COX8", "COX14", "COX7",
     "COX5A", "COX11", "COX10", "COX19", "COX1", "COX2", "COX3"
 ]
-cco = gene_df[gene_df['symbol'].isin(cco_lst)].copy()
-cco.loc[:, 'complex'] = 'Cytochrome C Oxidase'
+cco = get_gene_complex(gene_df, cco_lst, 'Cytochrome C Oxidase')
 
+# Concatenate mitochondrial replication related gene DataFrames
 mt_df = pd.concat([mt_ribo, pol_ga, atp_syn, cco])
 
+
+
+# Assign gene values to a new column in each concatenated DataFrame
 mt_df['genes'] =  'Mitochondria-Related'
 nuclear_df['genes'] =  'Nuclear-Related'
 
+
+
+# Concatenate both replication DataFrames
 compar_df = pd.concat([nuclear_df, mt_df])
 
-test_df = pd.merge(compar_df, fpkm_df, how="inner", left_on="symbol", right_on="gene_transcript")
+# Add time_point and fpkm1 values to each gene
+test_df = pd.merge(
+    compar_df, 
+    fpkm_df, 
+    how="inner", 
+    left_on="symbol", 
+    right_on="gene_transcript"
+)
 
+
+
+# Plot gene expression against time for each replication type
 plt.figure()
 
-sns.lineplot(
+fig = sns.lineplot(
     x='time_point',
-    y=np.log(test_df['fpkm1']),
+    y=np.log10(test_df['fpkm1']),
     hue='genes',
     data=test_df
 )
+
+fig.set_title('Log10-Transformed Gene Expression vs Time')
+fig.set_xlabel('Time / mins')
+fig.set_ylabel('Log10(Gene Expression) / Log10(fpkm1)')
+fig.legend(title='Replication Genes')
 
 plt.show()
