@@ -24,7 +24,7 @@ def get_gene_complex(gene_df, gene_lst, complex_name):
     df.loc[:, 'complex'] = complex_name
     return df
 
-# DNA Polymerases
+# Nuclear DNA Polymerases
 pol_ep_lst = ['DPB2', 'DPB3', 'DPB4']
 pol_ep = get_gene_complex(gene_df, pol_ep_lst, 'Pol Epsilon')
 
@@ -34,3 +34,7 @@ pol_al = get_gene_complex(gene_df, pol_al_lst, 'Pol Alpha')
 pol_de_lst = ['POL3', 'POL31', 'POL32']
 pol_de = get_gene_complex(gene_df, pol_de_lst, 'Pol Delta')
 
+
+# Mitochondrial DNA Polymerases
+pol_ga_lst = ['MIP1']
+pol_ga = get_gene_complex(gene_df, pol_ga_lst, 'Pol Gamma')
