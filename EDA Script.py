@@ -2,6 +2,7 @@
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
+import numpy as np
 
 # Read data, coerce dtypes, and assign to variables
 integer_dict = {
@@ -99,5 +100,25 @@ cco_lst = [
     "COX18", "COX16", "COX17", "COX12", "COX8", "COX14", "COX7",
     "COX5A", "COX11", "COX10", "COX19", "COX1", "COX2", "COX3"
 ]
-cco_lst = gene_df[gene_df['symbol'].isin(cco_lst)].copy()
-cco_lst.loc[:, 'complex'] = 'Cytochrome C Oxidase'
+cco = gene_df[gene_df['symbol'].isin(cco_lst)].copy()
+cco.loc[:, 'complex'] = 'Cytochrome C Oxidase'
+
+mt_df = pd.concat([mt_ribo, pol_ga, atp_syn, cco])
+
+mt_df['genes'] =  'Mitochondria-Related'
+nuclear_df['genes'] =  'Nuclear-Related'
+
+compar_df = pd.concat([nuclear_df, mt_df])
+
+test_df = pd.merge(compar_df, fpkm_df, how="inner", left_on="symbol", right_on="gene_transcript")
+
+plt.figure()
+
+sns.lineplot(
+    x='time_point',
+    y=np.log(test_df['fpkm1']),
+    hue='genes',
+    data=test_df
+)
+
+plt.show()
